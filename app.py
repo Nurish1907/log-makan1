@@ -2,7 +2,6 @@ import streamlit as st
 from datetime import datetime
 import pandas as pd
 
-Type "help", "copyright", "credits" or "license()" for more information.
 from datetime import datetime
 
 def kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur):
