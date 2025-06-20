@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 
 st.set_page_config(page_title="Log Makan Harian", layout="centered")
-st.title("🍽️ Log Makan Harian")
+st.title("🍽️ Log Makan Harian Nurrish")
 
 # --- Input ---
 nasi = st.selectbox("Nasi", ["Half", "Full"])
