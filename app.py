@@ -28,14 +28,15 @@ total_prot = nasi_prot + daging_prot + ayam_prot + ikan_prot + telur_prot + sayu
 if st.button("💾 Simpan Log"):
     log = {
         "Tarikh": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "Kalori (kcal)": round(total_kcal),
+        "Protein (g)": round(total_prot, 1),
         "Nasi": nasi,
         "Daging (g)": daging,
         "Ayam (g)": ayam,
         "Ikan (g)": ikan,
         "Telur (biji)": telur,
-        "Sayur/Sambal": sayur,
-        "Kalori (kcal)": round(total_kcal),
-        "Protein (g)": round(total_prot, 1)
+        "Sayur/Sambal": sayur
+        
     }
 
     try:
