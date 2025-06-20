@@ -2,66 +2,56 @@ import streamlit as st
 from datetime import datetime
 import pandas as pd
 
-from datetime import datetime
+st.set_page_config(page_title="Log Makan Harian", layout="centered")
+st.title("🍽️ Log Makan Harian")
 
-def kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur):
-    # Nasi
-    if nasi.lower() == "half":
-        nasi_kcal, nasi_prot = 100, 2
-    else:
-        nasi_kcal, nasi_prot = 200, 4
+# --- Input ---
+nasi = st.selectbox("Nasi", ["Half", "Full"])
+daging = st.number_input("Daging (gram)", min_value=0.0, step=10.0)
+ayam = st.number_input("Ayam (gram)", min_value=0.0, step=10.0)
+ikan = st.number_input("Ikan (gram)", min_value=0.0, step=10.0)
+telur = st.number_input("Telur (biji)", min_value=0, step=1)
+sayur = st.selectbox("Sayur/Sambal", ["Yes", "No"])
 
-    # Daging
-    daging_kcal = daging * 2.5
-    daging_prot = daging * 0.22
+# --- Kiraan ---
+nasi_kcal, nasi_prot = (100, 2) if nasi == "Half" else (200, 4)
+daging_kcal, daging_prot = daging * 2.5, daging * 0.22
+ayam_kcal, ayam_prot = ayam * 2.2, ayam * 0.20
+ikan_kcal, ikan_prot = ikan * 2.0, ikan * 0.22
+telur_kcal, telur_prot = telur * 90, telur * 6
+sayur_kcal, sayur_prot = (30, 1) if sayur == "Yes" else (0, 0)
 
-    # Ayam
-    ayam_kcal = ayam * 2.2
-    ayam_prot = ayam * 0.20
+total_kcal = nasi_kcal + daging_kcal + ayam_kcal + ikan_kcal + telur_kcal + sayur_kcal
+total_prot = nasi_prot + daging_prot + ayam_prot + ikan_prot + telur_prot + sayur_prot
 
-    # Ikan
-    ikan_kcal = ikan * 2.0
-    ikan_prot = ikan * 0.22
+# --- Output ---
+if st.button("💾 Simpan Log"):
+    log = {
+        "Tarikh": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "Nasi": nasi,
+        "Daging (g)": daging,
+        "Ayam (g)": ayam,
+        "Ikan (g)": ikan,
+        "Telur (biji)": telur,
+        "Sayur/Sambal": sayur,
+        "Kalori (kcal)": round(total_kcal),
+        "Protein (g)": round(total_prot, 1)
+    }
 
-    # Telur
-    telur_kcal = telur * 90
-    telur_prot = telur * 6
+    try:
+        df = pd.read_csv("log_makan.csv")
+        df = pd.concat([df, pd.DataFrame([log])], ignore_index=True)
+    except FileNotFoundError:
+        df = pd.DataFrame([log])
 
-    # Sayur/Sambal
-    if sayur.lower() == "yes":
-        sayur_kcal, sayur_prot = 30, 1
-    else:
-        sayur_kcal, sayur_prot = 0, 0
- 
-     total_kcal = sum([nasi_kcal, daging_kcal, ayam_kcal, ikan_kcal, telur_kcal, sayur_kcal])
-     total_prot = sum([nasi_prot, daging_prot, ayam_prot, ikan_prot, telur_prot, sayur_prot])
- 
-     return round(total_kcal), round(total_prot, 1)
- 
- 
- def log_makan():
-     print("📋 Log Makan Harian")
-     nasi = input("Nasi (Half / Full): ")
-     daging = float(input("Daging (g): "))
-     ayam = float(input("Ayam (g): "))
-     ikan = float(input("Ikan (g): "))
-     telur = int(input("Telur (biji): "))
-     sayur = input("Sayur/Sambal (Yes / No): ")
+    df.to_csv("log_makan.csv", index=False)
+    st.success("✅ Log berjaya disimpan!")
+    st.write(log)
 
-     kalori, protein = kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur)
- 
-     print("\n✅ Log Berjaya:")
-     print(f"📅 Tarikh: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-     print(f"🔥 Kalori: {kalori} kcal")
-     print(f"💪 Protein: {protein} g")
- 
-     # Optional: Simpan ke fail
-     save = input("Simpan ke log file? (y/n): ")
-     if save.lower() == "y":
-         with open("log_makan.csv", "a") as f:
-             f.write(f"{datetime.now()},{nasi},{daging},{ayam},{ikan},{telur},{sayur},{kalori},{protein}\n")
-         print("🗂️ Disimpan ke log_makan.csv")
- 
- 
- if __name__ == "__main__":
-     log_makan()
+# --- Show log terkini ---
+if st.checkbox("📋 Tunjuk Log Terkini"):
+    try:
+        df = pd.read_csv("log_makan.csv")
+        st.dataframe(df.tail(5))
+    except FileNotFoundError:
+        st.info("Tiada log lagi.")
