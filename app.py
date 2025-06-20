@@ -30,38 +30,38 @@ def kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur):
     # Sayur/Sambal
     if sayur.lower() == "yes":
         sayur_kcal, sayur_prot = 30, 1
-...     else:
-...         sayur_kcal, sayur_prot = 0, 0
-... 
-...     total_kcal = sum([nasi_kcal, daging_kcal, ayam_kcal, ikan_kcal, telur_kcal, sayur_kcal])
-...     total_prot = sum([nasi_prot, daging_prot, ayam_prot, ikan_prot, telur_prot, sayur_prot])
-... 
-...     return round(total_kcal), round(total_prot, 1)
-... 
-... 
-... def log_makan():
-...     print("📋 Log Makan Harian")
-...     nasi = input("Nasi (Half / Full): ")
-...     daging = float(input("Daging (g): "))
-...     ayam = float(input("Ayam (g): "))
-...     ikan = float(input("Ikan (g): "))
-...     telur = int(input("Telur (biji): "))
-...     sayur = input("Sayur/Sambal (Yes / No): ")
-... 
-...     kalori, protein = kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur)
-... 
-...     print("\n✅ Log Berjaya:")
-...     print(f"📅 Tarikh: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-...     print(f"🔥 Kalori: {kalori} kcal")
-...     print(f"💪 Protein: {protein} g")
-... 
-...     # Optional: Simpan ke fail
-...     save = input("Simpan ke log file? (y/n): ")
-...     if save.lower() == "y":
-...         with open("log_makan.csv", "a") as f:
-...             f.write(f"{datetime.now()},{nasi},{daging},{ayam},{ikan},{telur},{sayur},{kalori},{protein}\n")
-...         print("🗂️ Disimpan ke log_makan.csv")
-... 
-... 
-... if __name__ == "__main__":
-...     log_makan()
+    else:
+        sayur_kcal, sayur_prot = 0, 0
+ 
+     total_kcal = sum([nasi_kcal, daging_kcal, ayam_kcal, ikan_kcal, telur_kcal, sayur_kcal])
+     total_prot = sum([nasi_prot, daging_prot, ayam_prot, ikan_prot, telur_prot, sayur_prot])
+ 
+     return round(total_kcal), round(total_prot, 1)
+ 
+ 
+ def log_makan():
+     print("📋 Log Makan Harian")
+     nasi = input("Nasi (Half / Full): ")
+     daging = float(input("Daging (g): "))
+     ayam = float(input("Ayam (g): "))
+     ikan = float(input("Ikan (g): "))
+     telur = int(input("Telur (biji): "))
+     sayur = input("Sayur/Sambal (Yes / No): ")
+
+     kalori, protein = kira_kalori_protein(nasi, daging, ayam, ikan, telur, sayur)
+ 
+     print("\n✅ Log Berjaya:")
+     print(f"📅 Tarikh: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+     print(f"🔥 Kalori: {kalori} kcal")
+     print(f"💪 Protein: {protein} g")
+ 
+     # Optional: Simpan ke fail
+     save = input("Simpan ke log file? (y/n): ")
+     if save.lower() == "y":
+         with open("log_makan.csv", "a") as f:
+             f.write(f"{datetime.now()},{nasi},{daging},{ayam},{ikan},{telur},{sayur},{kalori},{protein}\n")
+         print("🗂️ Disimpan ke log_makan.csv")
+ 
+ 
+ if __name__ == "__main__":
+     log_makan()
